@@ -18,11 +18,14 @@ print(f'New mention content: {newMention.text}')
 with open('lastMention.txt','r') as f:
     last_mention = f.readline()
 
+
 with open('lastMention.txt','w') as f:
     print(f'Last mention content: {last_mention}')
     # Compare the mentions and if they are different, answer it
     if last_mention != newMention.text:
         print('There is a new mention.')
+        # Like the tweet.
+        client.like(newMention.id)
         # Generate one song
         utilities.chooseSong(sp)
         track_name = utilities.getTrackName()
