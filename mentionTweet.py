@@ -32,7 +32,7 @@ with open('lastMention.txt','w') as f:
         tweet_content = url + "\nWell well...\nLooks like if you were a song, you'd be " + track_name + ' by ' + artist_name + "."
         # Upload the reply to the last mention.
         try:
-            client.create_tweet(text=tweet_content,in_reply_to_tweet_id=newMention.id)
+            #client.create_tweet(text=tweet_content,in_reply_to_tweet_id=newMention.id)
             print('Tweet upload successful.')
             print('\n' + tweet_content)
         except:

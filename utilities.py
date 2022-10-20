@@ -1,5 +1,5 @@
 from random import randint
-import tokens as tkn
+import tokens as tkn #This is a file which must contain your tokens as Strings.
 import spotipy
 import tweepy
 from spotipy import SpotifyClientCredentials
