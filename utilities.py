@@ -1,21 +1,26 @@
 from random import randint
-
+import tokens as tkn
 import spotipy
 import tweepy
 from spotipy import SpotifyClientCredentials
 
-#Attribute definition
+# Attribute definition
 spotify_id = "25f4311410c64275b0b8ba828163ea2d"
 twitter_id = "1553856057885315073"
 client_id = "SFplZXRkOGpOQUdYdFZXbjNiM0k6MTpjaQ"
-playlists = ["https://open.spotify.com/playlist/37i9dQZEVXbNG2KDcFcKOF?si=2664a7a33ed54dc8","https://open.spotify.com/playlist/37i9dQZF1DX2rVwh3lcWku?si=61d343c913594976","https://open.spotify.com/playlist/37i9dQZF1DWUNNEvaozpW5?si=d5423d82463f4f5e","https://open.spotify.com/playlist/37i9dQZEVXbNFJfN1Vw8d9?si=d0717c637e264f46","https://open.spotify.com/playlist/2DNLQuVm2SepjFP2ZLVksD?si=eb86d5340e234eea"]
+playlists = ["https://open.spotify.com/playlist/37i9dQZEVXbNG2KDcFcKOF?si=2664a7a33ed54dc8",
+             "https://open.spotify.com/playlist/37i9dQZF1DX2rVwh3lcWku?si=61d343c913594976",
+             "https://open.spotify.com/playlist/37i9dQZF1DWUNNEvaozpW5?si=d5423d82463f4f5e",
+             "https://open.spotify.com/playlist/37i9dQZEVXbNFJfN1Vw8d9?si=d0717c637e264f46",
+             "https://open.spotify.com/playlist/2DNLQuVm2SepjFP2ZLVksD?si=eb86d5340e234eea"]
 url = ""
 track_name = ""
 artist_name = ""
 
+
 def authenticateToSpotify():
     # Definition of Spotify tokens
-    spotify_secret = "f0971b2780b44419b59550177a8ef4f7"
+    spotify_secret = tkn.spotify_secret
     # Authenticate to Spotify
     try:
         client_credentials_manager = SpotifyClientCredentials(client_id=spotify_id, client_secret=spotify_secret)
@@ -25,15 +30,15 @@ def authenticateToSpotify():
     except:
         print("Spotify authentication failed.")
 
+
 def authenticateToTwitter():
     # Definition of Twitter tokens
-    client_secret = "TYgBZVhOonkL6WMpq8sX8dOpQPbeTWWK-asJCe1WpM04SNR12M"
-    consumer_key = "Z8xMvxyLyWWqDHI3614M3bz1C"
-    consumer_secret = "aVhlnV8wf8BtVFmAUWKqLKfoFMKvs0Jtt2vFiv3IJh3LMymmVG"
-    access_token = "1553856057885315073-qrxZqS9CGUb74JfKPxiMCBkLhhUids"
-    access_token_secret = "KgIF3EnSIZ2FJLh8WeumcVFJWUd1UBD3rbWL5nCww7P9O"
-    bearer_token = "AAAAAAAAAAAAAAAAAAAAALLEfQEAAAAAKVOFRqOI2RRm%2BxnE0PAaSOnFJHI%3Dd6O8EUqeYsjVqyRiuumCRGLKXlB5zda5nglnQo0hfCE1eGEE8o"
-
+    client_secret = tkn.client_secret
+    consumer_key = tkn.consumer_key
+    consumer_secret = tkn.consumer_secret
+    access_token = tkn.access_token
+    access_token_secret = tkn.access_token_secret
+    bearer_token = tkn.bearer_token
     # Authenticate to Twitter
     try:
         client = tweepy.Client(bearer_token=bearer_token, consumer_key=consumer_key, consumer_secret=consumer_secret,
@@ -43,9 +48,10 @@ def authenticateToTwitter():
     except:
         print("Twitter authentication failed.")
 
+
 def chooseSong(sp):
     # Extract all the tracks from the playlist
-    global url, album, artist_genres, track_name, artist_name
+    global url, album, artist_genres, track_name, artist_name, track_uri
 
     playlistNumber = randint(1, (
             len(playlists) - 1))  # Generate a random number to choose one playlist from the playlists list
@@ -73,17 +79,22 @@ def chooseSong(sp):
     track_uri_short = track_uri.split(":")
     url = "https://open.spotify.com/track/" + track_uri_short[2]
 
+
 def getUrl():
     return url
+
 
 def getArtistName():
     return artist_name
 
+
 def getTrackName():
     return track_name
 
+
 def getArtistGenres():
     return artist_genres
+
 
 def getAlbum():
     return album
