@@ -5,14 +5,14 @@ import tweepy
 from spotipy import SpotifyClientCredentials
 
 # Attribute definition
-spotify_id = "25f4311410c64275b0b8ba828163ea2d"
-twitter_id = "1553856057885315073"
-client_id = "SFplZXRkOGpOQUdYdFZXbjNiM0k6MTpjaQ"
-playlists = ["https://open.spotify.com/playlist/37i9dQZEVXbNG2KDcFcKOF?si=2664a7a33ed54dc8",
-             "https://open.spotify.com/playlist/37i9dQZF1DX2rVwh3lcWku?si=61d343c913594976",
-             "https://open.spotify.com/playlist/37i9dQZF1DWUNNEvaozpW5?si=d5423d82463f4f5e",
-             "https://open.spotify.com/playlist/37i9dQZEVXbNFJfN1Vw8d9?si=d0717c637e264f46",
-             "https://open.spotify.com/playlist/2DNLQuVm2SepjFP2ZLVksD?si=eb86d5340e234eea"]
+spotify_id = tkn.spotify_id
+twitter_id = tkn.twitter_id
+client_id = tkn.client_id
+playlists = ["https://open.spotify.com/playlist/0UWhRhaDPBoAaX2RfqEt0J?si=7dfb670d9b4447f7",
+             "https://open.spotify.com/playlist/7iGBwaCkY7cDlYtaUVoGy2?si=c0ea546a64ba4887",
+             "https://open.spotify.com/playlist/7lA1UfHBhLwL01CyIpQCLB?si=a509d0ae7bc34380",
+             "https://open.spotify.com/playlist/37i9dQZEVXbNFJfN1Vw8d9?si=be30f9db0d4b4580",
+             "https://open.spotify.com/playlist/37i9dQZF1DWUNNEvaozpW5?si=8d53ae2744f94854"]
 url = ""
 track_name = ""
 artist_name = ""

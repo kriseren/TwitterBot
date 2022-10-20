@@ -7,7 +7,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 #Definition of variables
 tweet_content = ""
 url = ""
-playlists = ["https://open.spotify.com/playlist/37i9dQZEVXbNG2KDcFcKOF?si=2664a7a33ed54dc8","https://open.spotify.com/playlist/37i9dQZF1DX2rVwh3lcWku?si=61d343c913594976","https://open.spotify.com/playlist/37i9dQZF1DWUNNEvaozpW5?si=d5423d82463f4f5e","https://open.spotify.com/playlist/37i9dQZEVXbNFJfN1Vw8d9?si=d0717c637e264f46","https://open.spotify.com/playlist/2DNLQuVm2SepjFP2ZLVksD?si=eb86d5340e234eea"]
+playlists = utilities.playlists
 
 #Authenticate into Twitter and Spotify
 sp = utilities.authenticateToSpotify()
