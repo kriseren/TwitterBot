@@ -23,9 +23,9 @@ album = utilities.getAlbum()
 
 #Build the tweet content depending on the number of genres
 if(len(artist_genres)>1):
-    tweet_content = url+"\n🎵SONG OF THE DAY🎵\n"+track_name+" from "+artist_name+".\nIncluded in the album "+album+".\nMain genres: "+artist_genres[0]+", "+artist_genres[1]+".\n#music #songoftheday"
+    tweet_content = url+"\n🎵CANCIÓN DEL DÍA🎵\n"+track_name+" de "+artist_name+".\nIncluída en el álbum "+album+".\nGéneros principales: "+artist_genres[0]+", "+artist_genres[1]+".\n#music #songoftheday"
 else:
-    tweet_content = url+"\n🎵SONG OF THE DAY🎵\n"+track_name+" from "+artist_name+".\nIncluded in the album "+album+".\nMain genre: "+artist_genres[0]+".\n#music #songoftheday"
+    tweet_content = url+"\n🎵CANCIÓN DEL DÍA🎵\n"+track_name+" de "+artist_name+".\nIncluída en el álbum "+album+".\nGénero principal: "+artist_genres[0]+".\n#music #songoftheday"
 
 #Upload the tweet
 print("[TWEET STATUS]")

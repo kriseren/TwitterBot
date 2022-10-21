@@ -1,5 +1,6 @@
 import utilities
-
+import tokens as tkn
+import random
 # Definition of variables
 tweet_content = ""
 keywords = ""
@@ -15,11 +16,11 @@ print(f'New mention id: {newMention.id}')
 print(f'New mention content: {newMention.text}')
 
 # Read the last mention and compare it with the new mention
-with open('lastMention.txt','r') as f:
+with open(tkn.installation_directory+'lastMention.txt','r') as f:
     last_mention = f.readline()
 
 
-with open('lastMention.txt','r+') as f:
+with open(tkn.installation_directory+'lastMention.txt','r+') as f:
     print(f'Last mention content: {last_mention}')
     # Compare the mentions and if they are different, answer it
     if last_mention != newMention.text:
@@ -32,7 +33,11 @@ with open('lastMention.txt','r+') as f:
         artist_name = utilities.getArtistName()
         url = utilities.getUrl()
         # Build the answer with one song.
-        tweet_content = url + "\nWell well...\nLooks like if you were a song, you'd be " + track_name + ' by ' + artist_name + "."
+        if(random.randint(0,2)): # To add human expressions, each time the bot uses one verb.
+            verb = "fueses"
+        else:
+            verb = "fueras"
+        tweet_content = url + "\nBueno bueno...\nParece que si "+verb+" una canción serías " + track_name + ' de ' + artist_name + "."
         # Upload the reply to the last mention.
         try:
             #client.create_tweet(text=tweet_content,in_reply_to_tweet_id=newMention.id)
