@@ -38,9 +38,9 @@ with open('lastMention.txt','w') as f:
             #client.create_tweet(text=tweet_content,in_reply_to_tweet_id=newMention.id)
             print('Tweet upload successful.')
             print('\n' + tweet_content)
+            # Write the new mention to the file
+            f.write(newMention.text)
         except:
             print('The upload failed --> ' + tweet_content)
-        # Write the new mention to the file
-        f.write(newMention.text)
     else:
         print('There is no new mention.')
