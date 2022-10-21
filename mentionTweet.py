@@ -19,7 +19,7 @@ with open('lastMention.txt','r') as f:
     last_mention = f.readline()
 
 
-with open('lastMention.txt','w') as f:
+with open('lastMention.txt','r+') as f:
     print(f'Last mention content: {last_mention}')
     # Compare the mentions and if they are different, answer it
     if last_mention != newMention.text:
