@@ -14,5 +14,5 @@ for user in followers.data:
     if user in following.data:
         print("Already following "+user.username)
     else:
-        print("Followed:"+user.username)
+        print("Started following "+user.username)
         client.follow_user(user.id)

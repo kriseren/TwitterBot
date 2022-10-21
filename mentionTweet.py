@@ -18,7 +18,7 @@ print(f'New mention content: {newMention.text}')
 # Read the last mention and compare it with the new mention
 with open(tkn.installation_directory+'lastMention.txt','r') as f:
     last_mention = f.readline()
-
+    f.close()
 
 with open(tkn.installation_directory+'lastMention.txt','r+') as f:
     print(f'Last mention content: {last_mention}')
@@ -49,3 +49,5 @@ with open(tkn.installation_directory+'lastMention.txt','r+') as f:
             print('The upload failed --> ' + tweet_content)
     else:
         print('There is no new mention.')
+# Closes the file
+f.close()
