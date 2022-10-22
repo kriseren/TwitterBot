@@ -32,12 +32,12 @@ def answerTweet(mentionText,sp):
 
     # The keywords definition.
     keywords1 = ["canción soy", "canción sería"]
-    keywords2 = ["Recomiéndame", "recomiendas"]
+    keywords2 = ["Recomiéndame", "recomiendas","recomendación","recomiéndame"]
 
     # Depending on the mentionText contains keywords, the answer will be different.
     if keywords1[0] in mentionText or keywords1[1] in mentionText:
         tweet_content = url + "\nBueno bueno...\nParece que si " + verb + " una canción serías " + track_name + ' de ' + artist_name + "."
-    elif keywords2[0] in mentionText or keywords2[1] in mentionText:
+    elif keywords2[0] in mentionText or keywords2[1] in mentionText or keywords2[2] in mentionText or keywords2[3] in mentionText:
         tweet_content = url + "\nDéjame que piense...\nVale, te recomiendo " + track_name + ' de ' + artist_name + "."
     else:
         tweet_content="No te he entendido, prueba a pedirme 'qué canción serías' o 'qué canción te recomiendo' ;)"
