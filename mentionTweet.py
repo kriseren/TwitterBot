@@ -20,7 +20,7 @@ print(f'New mention content: {newMention.text}')
 with open(tkn.installation_directory + 'lastMention.txt', 'r') as f:
     last_mention = f.readline()
 
-with open(tkn.installation_directory + 'lastMention.txt', 'r+') as f:
+with open(tkn.installation_directory + 'lastMention.txt', 'w') as f:
     print(f'Last mention content: {last_mention}')
     # Compare the mentions and if they are different, answer it
     if last_mention != newMention.text:
@@ -43,10 +43,10 @@ with open(tkn.installation_directory + 'lastMention.txt', 'r+') as f:
             # client.create_tweet(text=tweet_content,in_reply_to_tweet_id=newMention.id)
             print('Tweet upload successful.')
             print('\n' + tweet_content)
-            # Write the new mention to the file
+            # Write the new mention to the file.
             f.write(newMention.text)
         except:
             print('The upload failed --> ' + tweet_content)
     else:
         print('There is no new mention.')
-        f.write(last_mention)
+        f.write(last_mention) # Write the last mention back to the file.
