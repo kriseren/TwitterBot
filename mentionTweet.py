@@ -1,6 +1,7 @@
 import utilities
 import tokens as tkn
 import random
+
 # Definition of variables
 tweet_content = ""
 keywords = ""
@@ -16,11 +17,10 @@ print(f'New mention id: {newMention.id}')
 print(f'New mention content: {newMention.text}')
 
 # Read the last mention and compare it with the new mention
-with open(tkn.installation_directory+'lastMention.txt','r') as f:
+with open(tkn.installation_directory + 'lastMention.txt', 'r') as f:
     last_mention = f.readline()
-    f.close()
 
-with open(tkn.installation_directory+'lastMention.txt','r+') as f:
+with open(tkn.installation_directory + 'lastMention.txt', 'r+') as f:
     print(f'Last mention content: {last_mention}')
     # Compare the mentions and if they are different, answer it
     if last_mention != newMention.text:
@@ -33,14 +33,14 @@ with open(tkn.installation_directory+'lastMention.txt','r+') as f:
         artist_name = utilities.getArtistName()
         url = utilities.getUrl()
         # Build the answer with one song.
-        if(random.randint(0,2)): # To add human expressions, each time the bot uses one verb.
+        if random.randint(0, 2):  # To add human expressions, each time the bot uses one verb.
             verb = "fueses"
         else:
             verb = "fueras"
-        tweet_content = url + "\nBueno bueno...\nParece que si "+verb+" una canción serías " + track_name + ' de ' + artist_name + "."
+        tweet_content = url + "\nBueno bueno...\nParece que si " + verb + " una canción serías " + track_name + ' de ' + artist_name + "."
         # Upload the reply to the last mention.
         try:
-            #client.create_tweet(text=tweet_content,in_reply_to_tweet_id=newMention.id)
+            # client.create_tweet(text=tweet_content,in_reply_to_tweet_id=newMention.id)
             print('Tweet upload successful.')
             print('\n' + tweet_content)
             # Write the new mention to the file
@@ -49,5 +49,4 @@ with open(tkn.installation_directory+'lastMention.txt','r+') as f:
             print('The upload failed --> ' + tweet_content)
     else:
         print('There is no new mention.')
-# Closes the file
-f.close()
+        f.write(last_mention)
