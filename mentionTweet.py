@@ -1,10 +1,5 @@
-import utilities
 import tokens as tkn
-import random
-
-# Definition of variables
-tweet_content = ""
-keywords = ""
+import utilities
 
 # Authenticate into Twitter and Spotify
 sp = utilities.authenticateToSpotify()
@@ -27,20 +22,11 @@ with open(tkn.installation_directory + 'lastMention.txt', 'w') as f:
         print('There is a new mention.')
         # Like the tweet.
         client.like(newMention.id)
-        # Generate one song
-        utilities.chooseSong(sp)
-        track_name = utilities.getTrackName()
-        artist_name = utilities.getArtistName()
-        url = utilities.getUrl()
-        # Build the answer with one song.
-        if random.randint(0, 2):  # To add human expressions, each time the bot uses one verb.
-            verb = "fueses"
-        else:
-            verb = "fueras"
-        tweet_content = url + "\nBueno bueno...\nParece que si " + verb + " una canción serías " + track_name + ' de ' + artist_name + "."
+        #Call the answerMention method in utilities to create the reply content.
+        tweet_content=utilities.answerTweet(newMention.text,sp)
         # Upload the reply to the last mention.
         try:
-            # client.create_tweet(text=tweet_content,in_reply_to_tweet_id=newMention.id)
+            client.create_tweet(text=tweet_content,in_reply_to_tweet_id=newMention.id)
             print('Tweet upload successful.')
             print('\n' + tweet_content)
             # Write the new mention to the file.

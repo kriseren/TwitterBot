@@ -17,7 +17,33 @@ url = ""
 track_name = ""
 artist_name = ""
 
+def answerTweet(mentionText,sp):
+    # Build the answer with one song.
+    if randint(0, 2):  # To add human expressions, each time the bot uses one verb.
+        verb = "fueses"
+    else:
+        verb = "fueras"
 
+    # Generate one song
+    chooseSong(sp)
+    track_name = getTrackName()
+    artist_name = getArtistName()
+    url = getUrl()
+
+    # The keywords definition.
+    keywords1 = ["canción soy", "canción sería"]
+    keywords2 = ["Recomiéndame", "recomiendas"]
+
+    # Depending on the mentionText contains keywords, the answer will be different.
+    if keywords1[0] in mentionText or keywords1[1] in mentionText:
+        tweet_content = url + "\nBueno bueno...\nParece que si " + verb + " una canción serías " + track_name + ' de ' + artist_name + "."
+    elif keywords2[0] in mentionText or keywords2[1] in mentionText:
+        tweet_content = url + "\nDéjame que piense...\nVale, te recomiendo " + track_name + ' de ' + artist_name + "."
+    else:
+        tweet_content="No te he entendido, prueba a pedirme 'qué canción serías' o 'qué canción te recomiendo' ;)"
+
+
+    return tweet_content
 def authenticateToSpotify():
     # Definition of Spotify tokens
     spotify_secret = tkn.spotify_secret
