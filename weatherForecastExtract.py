@@ -19,7 +19,7 @@ def getWeatherData(ciudad):
         # Se obtienen los valores del diccionario y se almacenan en un array.
         min = datos["main"]["temp_min"]
         max = datos["main"]["temp_max"]
-        media = (max+min)/2
+        media = round((max+min)/2,2)
         humidity = datos["main"]["humidity"]
         weatherData = [min,max,media,humidity]
         return weatherData
