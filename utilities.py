@@ -61,10 +61,10 @@ def answerTweet(mentionText,sp):
         else:
             clothes = "manga larga"
 
-        tweet_content = "\nA ver... Teniendo en cuenta que hará una temperatura media de " + str(media) + 'ºC y la humedad es del ' + str(humidity) + \
-                        "%, yo de ti me pondría "+clothes+" ;)"
+        tweet_content = "\nA ver...\nTeniendo en cuenta que hará una temperatura media de " + str(media) + 'ºC y la humedad es del ' + str(humidity) + \
+                        " %, yo de ti me pondría "+clothes+" 🙂"
     else:
-        tweet_content="No te he entendido, consulta mi perfil para ver qué tipo de cosas puedo hacer ;)"
+        tweet_content="No te he entendido, consulta mi perfil para ver qué tipo de cosas puedo hacer 🙂"
 
 
     return tweet_content
