@@ -4,6 +4,8 @@ import spotipy
 import tweepy
 from spotipy import SpotifyClientCredentials
 
+import weatherForecastExtract
+
 # Attribute definition
 spotify_id = tkn.spotify_id
 twitter_id = tkn.twitter_id
@@ -24,23 +26,45 @@ def answerTweet(mentionText,sp):
     else:
         verb = "fueras"
 
-    # Generate one song
-    chooseSong(sp)
-    track_name = getTrackName()
-    artist_name = getArtistName()
-    url = getUrl()
-
     # The keywords definition.
     keywords1 = ["canción soy", "canción sería"]
     keywords2 = ["recomiéndame", "recomiendas","recomendación","recomendar"]
+    keywords3 = ["ropa", "ponerme","pongo","ponga"]
 
     # Depending on the mentionText contains keywords, the answer will be different.
     if keywords1[0] in mentionText.lower() or keywords1[1] in mentionText.lower():
+        # Generate one song
+        chooseSong(sp)
+        track_name = getTrackName()
+        artist_name = getArtistName()
+        url = getUrl()
+
+        # Define el contenido del tweet.
         tweet_content = url + "\nBueno bueno...\nParece que si " + verb + " una canción serías " + track_name + ' de ' + artist_name + "."
+
     elif keywords2[0] in mentionText.lower() or keywords2[1] in mentionText or keywords2[2] in mentionText or keywords2[3] in mentionText:
+        # Generate one song
+        chooseSong(sp)
+        track_name = getTrackName()
+        artist_name = getArtistName()
+        url = getUrl()
+        # Define el contenido del tweet.
         tweet_content = url + "\nDéjame que piense...\nVale, te recomiendo " + track_name + ' de ' + artist_name + "."
+
+
+    elif keywords3[0] in mentionText.lower() or keywords3[1] in mentionText or keywords3[2] in mentionText or keywords3[3] in mentionText:
+        weatherData = weatherForecastExtract.getWeatherData("petrer")
+        media = weatherData[2]
+        humidity = weatherData[3]
+        if(media>22):
+            clothes = "manga corta"
+        else:
+            clothes = "manga larga"
+
+        tweet_content = "\nA ver... Teniendo en cuenta que hará una temperatura media de " + str(media) + 'ºC y la humedad es del ' + str(humidity) + \
+                        "%, yo de ti me pondría "+clothes+" ;)"
     else:
-        tweet_content="No te he entendido, prueba a pedirme algo como '¿Qué canción sería?' o '¿Qué canción me recomiendas?' ;)"
+        tweet_content="No te he entendido, consulta mi perfil para ver qué tipo de cosas puedo hacer ;)"
 
 
     return tweet_content
