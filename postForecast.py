@@ -15,7 +15,7 @@ humidity = weatherData["main"]["humidity"]
 temp = weatherData["main"]["temp"]
 sensacion = weatherData["main"]["feels_like"]
 
-print(weatherData)
+#print(weatherData)
 
 #Creación del tweet con los datos obtenidos.
 tweet_content = "☁PREVISIÓN METEOROLÓGICA☁\n" \
