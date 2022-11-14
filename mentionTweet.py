@@ -26,7 +26,7 @@ with open(tkn.installation_directory + 'lastMention.txt', 'w') as f:
         tweet_content=utilities.answerTweet(newMention.text,sp)
         # Publica la respuesta a la mención.
         try:
-            client.create_tweet(text=tweet_content,in_reply_to_tweet_id=newMention.id)
+            #client.create_tweet(text=tweet_content,in_reply_to_tweet_id=newMention.id)
             print('Tweet upload successful.')
             print('\n' + tweet_content)
             # Escribe la nueva mención en el fichero.

@@ -54,15 +54,16 @@ def answerTweet(mentionText,sp):
 
     elif keywords3[0] in mentionText.lower() or keywords3[1] in mentionText or keywords3[2] in mentionText or keywords3[3] in mentionText:
         weatherData = weatherForecastExtract.getWeatherData("petrer")
-        media = weatherData[2]
-        humidity = weatherData[3]
+        media = weatherData["main"]["minTemp"]
+        humidity = weatherData["main"]["humidity"]
+        temp = weatherData["main"]["temp"]
         if(media>22):
             clothes = "manga corta"
         else:
             clothes = "manga larga"
 
-        tweet_content = "\nA ver...\nTeniendo en cuenta que hará una temperatura media de " + str(media) + ' ºC y la humedad es del ' + str(humidity) + \
-                        " %, yo de ti me pondría algo de "+clothes+" 🙃"
+        tweet_content = '\nA ver...\nTeniendo en cuenta que la temperatura actual es de '+str(weatherData[4]) +'ºC y la humedad es del ' + str(humidity) + \
+                        '%, yo de ti me pondría algo de '+clothes+' 🙃'
     else:
         tweet_content="No te he entendido, consulta mi perfil para ver qué tipo de cosas puedo hacer 🙂"
 
