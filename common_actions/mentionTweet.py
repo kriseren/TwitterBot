@@ -1,5 +1,4 @@
-import tokens as tkn
-import utilities
+from auth import tokens as tkn, auth_utilities
 
 # Autenticación en Spotify y Twitter.
 sp = utilities.authenticateToSpotify()
@@ -12,10 +11,10 @@ print(f'New mention id: {newMention.id}')
 print(f'New mention content: {newMention.text}')
 
 # Lee la última mención y la compara con la nueva.
-with open(tkn.installation_directory + 'lastMention.txt', 'r') as f:
+with open('lastMention.txt', 'r') as f:
     last_mention = f.readline()
 
-with open(tkn.installation_directory + 'lastMention.txt', 'w') as f:
+with open('lastMention.txt', 'w') as f:
     print(f'Last mention content: {last_mention}')
     # Compara las menciones y si son diferentes la responde.
     if last_mention != newMention.text:
@@ -23,7 +22,7 @@ with open(tkn.installation_directory + 'lastMention.txt', 'w') as f:
         # Da me gusta al tweet.
         client.like(newMention.id)
         #Llama al método answerMention en utilities para crear el contenido de la respuesta.
-        tweet_content=utilities.answerTweet(newMention.text,sp)
+        tweet_content= utilities.answerTweet(newMention.text, sp)
         # Publica la respuesta a la mención.
         try:
             #client.create_tweet(text=tweet_content,in_reply_to_tweet_id=newMention.id)

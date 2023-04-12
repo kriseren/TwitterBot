@@ -1,8 +1,8 @@
 # Importo las dependencias.
-import requests
-import tokens as tkn
+from auth import tokens as tkn
 
-def getWeatherData(ciudad):
+
+def getWeatherDataOld(ciudad):
     # Creamos un diccionario con los parámetros de la URL.
     parametros={"q":ciudad,
                 "units":"metric",
@@ -28,4 +28,4 @@ def getWeatherData(ciudad):
         print("De esa ciudad no tengo datos.")
 
 if __name__ == '__main__':
-    getWeatherData("petrer")
+    getWeatherData()

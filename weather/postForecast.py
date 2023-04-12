@@ -1,5 +1,4 @@
-import tweepy
-import utilities
+from auth import auth_utilities
 import weatherForecastExtract
 
 
@@ -15,8 +14,6 @@ humidity = weatherData["main"]["humidity"]
 temp = weatherData["main"]["temp"]
 sensacion = weatherData["main"]["feels_like"]
 
-#print(weatherData)
-
 #Creación del tweet con los datos obtenidos.
 tweet_content = "☁PREVISIÓN METEOROLÓGICA☁\n" \
                 "¡Buenos días! Para hoy se esperan los siguientes datos\n" \
@@ -27,7 +24,7 @@ tweet_content = "☁PREVISIÓN METEOROLÓGICA☁\n" \
 #Upload the tweet
 print("[TWEET STATUS]")
 try:
-    client.create_tweet(text=tweet_content)
+    #client.create_tweet(text=tweet_content)
     print("Tweet upload successful.")
     print("\n"+tweet_content)
 except:

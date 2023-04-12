@@ -1,12 +1,9 @@
+import auth.tokens as tkn
 from random import randint
-import tokens as tkn #This is a file which must contain your tokens as Strings.
 import spotipy
 import tweepy
-from spotipy import SpotifyClientCredentials
 
-import weatherForecastExtract
-
-# Attribute definition
+# Definición de variables.
 spotify_id = tkn.spotify_id
 twitter_id = tkn.twitter_id
 client_id = tkn.client_id
@@ -15,11 +12,9 @@ playlists = ["https://open.spotify.com/playlist/0UWhRhaDPBoAaX2RfqEt0J?si=7dfb67
              "https://open.spotify.com/playlist/7lA1UfHBhLwL01CyIpQCLB?si=a509d0ae7bc34380",
              "https://open.spotify.com/playlist/37i9dQZEVXbNFJfN1Vw8d9?si=be30f9db0d4b4580",
              "https://open.spotify.com/playlist/37i9dQZF1DWUNNEvaozpW5?si=8d53ae2744f94854"]
-url = ""
-track_name = ""
-artist_name = ""
 
-def answerTweet(mentionText,sp):
+
+def answer_music_tweet(mentionText, sp):
     # Build the answer with one song.
     if randint(0, 2):  # To add human expressions, each time the bot uses one verb.
         verb = "fueses"
@@ -28,8 +23,8 @@ def answerTweet(mentionText,sp):
 
     # The keywords definition.
     keywords1 = ["canción soy", "canción sería"]
-    keywords2 = ["recomiéndame", "recomiendas","recomendación","recomendar"]
-    keywords3 = ["ropa", "ponerme","pongo","ponga"]
+    keywords2 = ["recomiéndame", "recomiendas", "recomendación", "recomendar"]
+    keywords3 = ["ropa", "ponerme", "pongo", "ponga"]
 
     # Depending on the mentionText contains keywords, the answer will be different.
     if keywords1[0] in mentionText.lower() or keywords1[1] in mentionText.lower():
@@ -42,7 +37,8 @@ def answerTweet(mentionText,sp):
         # Define el contenido del tweet.
         tweet_content = url + "\nBueno bueno...\nParece que si " + verb + " una canción serías " + track_name + ' de ' + artist_name + "."
 
-    elif keywords2[0] in mentionText.lower() or keywords2[1] in mentionText or keywords2[2] in mentionText or keywords2[3] in mentionText:
+    elif keywords2[0] in mentionText.lower() or keywords2[1] in mentionText or keywords2[2] in mentionText or keywords2[
+        3] in mentionText:
         # Generate one song
         chooseSong(sp)
         track_name = getTrackName()
@@ -50,56 +46,12 @@ def answerTweet(mentionText,sp):
         url = getUrl()
         # Define el contenido del tweet.
         tweet_content = url + "\nDéjame que piense...\nVale, te recomiendo " + track_name + ' de ' + artist_name + "."
-
-
-    elif keywords3[0] in mentionText.lower() or keywords3[1] in mentionText or keywords3[2] in mentionText or keywords3[3] in mentionText:
-        weatherData = weatherForecastExtract.getWeatherData("petrer")
-        media = weatherData["main"]["minTemp"]
-        humidity = weatherData["main"]["humidity"]
-        temp = weatherData["main"]["temp"]
-        if(media>22):
-            clothes = "manga corta"
-        else:
-            clothes = "manga larga"
-
-        tweet_content = '\nA ver...\nTeniendo en cuenta que la temperatura actual es de '+str(weatherData[4]) +'ºC y la humedad es del ' + str(humidity) + \
-                        '%, yo de ti me pondría algo de '+clothes+' 🙃'
     else:
-        tweet_content="No te he entendido, consulta mi perfil para ver qué tipo de cosas puedo hacer 🙂"
-
+        tweet_content = "No te he entendido, consulta mi perfil para ver qué tipo de cosas puedo hacer 🙂"
 
     return tweet_content
-def authenticateToSpotify():
-    # Definition of Spotify tokens
-    spotify_secret = tkn.spotify_secret
-    # Authenticate to Spotify
-    try:
-        client_credentials_manager = SpotifyClientCredentials(client_id=spotify_id, client_secret=spotify_secret)
-        sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-        print("Spotify authentication successful.")
-        return sp
-    except:
-        print("Spotify authentication failed.")
 
-
-def authenticateToTwitter():
-    # Definition of Twitter tokens
-    client_secret = tkn.client_secret
-    consumer_key = tkn.consumer_key
-    consumer_secret = tkn.consumer_secret
-    access_token = tkn.access_token
-    access_token_secret = tkn.access_token_secret
-    bearer_token = tkn.bearer_token
-    # Authenticate to Twitter
-    try:
-        client = tweepy.Client(bearer_token=bearer_token, consumer_key=consumer_key, consumer_secret=consumer_secret,
-                               access_token=access_token, access_token_secret=access_token_secret)
-        print("Twitter authentication successful.")
-        return client
-    except:
-        print("Twitter authentication failed.")
-
-
+# Método que escoge una canción de todas las playlists.
 def chooseSong(sp):
     # Extract all the tracks from the playlist
     global url, album, artist_genres, track_name, artist_name, track_uri

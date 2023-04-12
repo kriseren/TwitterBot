@@ -1,5 +1,4 @@
-import tweepy
-import utilities
+from auth import auth_utilities
 
 #Authenticate into Twitter and Spotify
 sp = utilities.authenticateToSpotify()
