@@ -57,7 +57,7 @@ def load_telephone_numbers():
 
 # Función principal del programa que llama a los demás métodos.
 def main(client: tweepy.Client):
-    Main.print_message(f"F1 REMINDER SCRIPT INITIALISED AT {Main.get_time()}")
+    Main.print_title_message(f"F1 REMINDER SCRIPT INITIALISED AT {Main.get_time()}")
 
     # Obtiene la información del próximo Gran Premio.
     response = requests.get('https://ergast.com/api/f1/current.json')
@@ -72,14 +72,13 @@ def main(client: tweepy.Client):
         send_whatsapp_message(message, number)
 
     # Sube el tweet con el mensaje.
-    print("\n[TWEET CONTENT]\n", message)
+    Main.print_message("TWEET CONTENT", message)
     try:
         client.create_tweet(text=message)
-        print(colored("\n[TWEET STATUS]: F1 reminder upload successful.", "green"))
+        Main.print_message("F1 REMINDER STATUS","F1 reminder upload successful.","green")
     except Exception as ex:
-        print(colored("\n[TWEET STATUS]: F1 reminder upload failed", "red"))
-        print(colored(f"\n[ERROR MESSAGE]: {str(ex)}", "red"))
-
+        Main.print_message("F1 REMINDER STATUS", "F1 reminder upload failed.", "red")
+        Main.print_message("ERROR MESSAGE",str(ex),"red")
 
 # Comprobación necesaria de Python para que se ejecute Main.
 if __name__ == '__main__':

@@ -1,6 +1,5 @@
 # SCRIPT QUE GENERA Y PUBLICA UN TWEET COMO RECOMENDACIÓN MUSICAL DIARIA.
 import tweepy
-from termcolor import colored
 
 import Main
 from auth import auth_utilities
@@ -10,7 +9,7 @@ from music import music_utilities
 # Método principal del script.
 def main(client: tweepy.Client):
 
-    Main.print_message(f"MUSIC RECOMMENDATION SCRIPT INITIALISED AT {Main.get_time()}")
+    Main.print_title_message(f"MUSIC RECOMMENDATION SCRIPT INITIALISED AT {Main.get_time()}")
 
     # Inicia sesión en la API de Spotify.
     sp = auth_utilities.authenticate_to_spotify()
@@ -32,13 +31,13 @@ def main(client: tweepy.Client):
                         artist_genres[0] + ".\n#music #songoftheday"
 
     # Upload the tweet
-    print("\n[TWEET CONTENT]\n", tweet_content)
+    Main.print_message("TWEET CONTENT",tweet_content)
     try:
         client.create_tweet(text=tweet_content)
-        print(colored("\n[TWEET STATUS]: Music recommendation upload successful.","green"))
+        Main.print_message("MUSIC RECOMMENDATION STATUS","Music recommendation upload successful.","green")
     except Exception as ex:
-        print(colored("\n[TWEET STATUS]: Music recommendation upload failed","red"))
-        print(colored(f"\n[ERROR MESSAGE]: {str(ex)}", "red"))
+        Main.print_message("MUSIC RECOMMENDATION STATUS","Music recommendation upload failed","red")
+        Main.print_message("ERROR MESSAGE",str(ex),"red")
 
 if __name__ == '__main__':
     main()

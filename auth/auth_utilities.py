@@ -1,8 +1,9 @@
 # Tokens es un fichero que ha de contener los tokens definidos como Strings.
 import spotipy
 import tweepy
-from termcolor import colored
 from spotipy import SpotifyClientCredentials
+
+import Main
 from auth import tokens as tkn
 
 
@@ -16,10 +17,11 @@ def authenticate_to_spotify():
     try:
         client_credentials_manager = SpotifyClientCredentials(client_id=spotify_id, client_secret=spotify_secret)
         sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-        print(colored("\n[SP AUTH STATUS]: Spotify authentication successful.","green"))
+        Main.print_message("SP AUTH STATUS","Spotify authentication successful","green")
         return sp
-    except:
-        print(colored("\n[SP AUTH STATUS]: Spotify authentication failed.", "red"))
+    except Exception as ex:
+        Main.print_message("SP AUTH STATUS", "Spotify authentication failed", "red")
+        Main.print_message("ERROR MESSAGE",str(ex),"red")
 
 # Método que inicia sesión en la API de Twitter.
 def authenticate_to_twitter():
@@ -34,7 +36,8 @@ def authenticate_to_twitter():
     try:
         client = tweepy.Client(bearer_token=bearer_token, consumer_key=consumer_key, consumer_secret=consumer_secret,
                                access_token=access_token, access_token_secret=access_token_secret)
-        print(colored("[TW AUTH STATUS]: Twitter authentication successful.","green"))
+        Main.print_message("TW AUTH STATUS","Twitter authentication successful","green")
         return client
-    except:
-        print(colored("[TW AUTH STATUS]: Twitter authentication failed.","red"))
+    except Exception as ex:
+        Main.print_message("TW AUTH STATUS","Twitter authentication failed","red")
+        Main.print_message("ERROR MESSAGE",str(ex),"red")
