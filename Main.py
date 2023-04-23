@@ -1,13 +1,15 @@
+import asyncio
 import datetime
 import time
 
 import termcolor
-from twilio.rest import Client
+from aiogram import Bot
+
 from auth import auth_utilities
 from auth import tokens as tkn
+from common_actions import mentions
 from f1 import nextGP
 from music import postRecommendation
-from common_actions import mentions
 
 
 # Método que obtiene la hora y la fecha actuales.
@@ -38,15 +40,14 @@ def print_title_message(content):
     # Imprime el mensaje.
     print(f"\n{left_separator} {content} {right_separator}")
 
-# Función que inicia sesión en Twilio, la API de Whatsapp y envía el mensaje pasado como parámetro.
-def send_error_message(message: str, receiver_number: str):
-    twilio_client = Client(tkn.twilio_sid, tkn.twilio_token)
+# Función que envía un mensaje de Telegram a través del chat pasado modo parámetro.
+async def send_error_message(message):
+    # Crea una instancia del bot de Telegram
+    bot = Bot(token=tkn.telegram_token)
 
-    twilio_client.messages.create(
-        from_='whatsapp:+14155238886',
-        body=message,
-        to=f'whatsapp:+34{receiver_number}'
-    )
+    # Envía el mensaje al chat especificado
+    await bot.send_message(chat_id=tkn.telegram_admin_chat_id, text=message)
+    await bot.close_bot()
 
 # Método principal del programa.
 def main():
@@ -67,7 +68,7 @@ def main():
                 postRecommendation.main(client)
 
             # Verifica si es la hora programada para subir el tweet sobre la F1 del día.
-            elif now.hour == 18 and now.minute == 30:
+            elif now.hour == 10 and now.minute == 00:
                 nextGP.main(client)
             else:
                 pass
@@ -78,7 +79,8 @@ def main():
             # Pausar el programa durante un minuto antes de verificar la hora nuevamente.
             time.sleep(60)
     except Exception as ex:
-        send_error_message(f"ERROR {str(ex)}",tkn.admin_telephone)
+        print(ex)
+        asyncio.run(send_error_message(f"ERROR {str(ex)}"))
 
 
 if __name__ == '__main__':

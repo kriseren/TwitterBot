@@ -40,8 +40,6 @@ def main(main_client: tweepy.Client):
         # Da me gusta al tweet.
         client.like(new_mention.id)
         # Comprueba el texto de la mención.
-        Main.print_message("NEW MENTION TEXT",new_mention.text)
+        Main.print_message("NEW MENTION TEXT", new_mention.text)
         # Escribe la nueva mención en el fichero de lastMention.txt para actualizar el registro.
         update_last_mention()
-
-
