@@ -1,7 +1,7 @@
 import asyncio
-import datetime
+from datetime import datetime
+import traceback
 import time
-
 import termcolor
 from aiogram import Bot
 
@@ -14,7 +14,7 @@ from music import postRecommendation
 
 # Método que obtiene la hora y la fecha actuales.
 def get_time():
-    return datetime.datetime.now()
+    return datetime.now()
 
 # Método que imprime por pantalla un mensaje pasado como parámetro.
 def print_message(title: str,content: str,color: str = "white"):
@@ -47,7 +47,10 @@ async def send_error_message(message):
 
     # Envía el mensaje al chat especificado
     await bot.send_message(chat_id=tkn.telegram_admin_chat_id, text=message)
-    await bot.close_bot()
+
+    # Cierra la sesión del bot.
+    session = await bot.get_session()
+    await session.close()
 
 # Método principal del programa.
 def main():
@@ -68,7 +71,7 @@ def main():
                 postRecommendation.main(client)
 
             # Verifica si es la hora programada para subir el tweet sobre la F1 del día.
-            elif now.hour == 10 and now.minute == 00:
+            elif now.hour == 8 and now.minute == 00:
                 nextGP.main(client)
             else:
                 pass
@@ -81,6 +84,7 @@ def main():
     except Exception as ex:
         print(ex)
         asyncio.run(send_error_message(f"ERROR {str(ex)}"))
+        traceback.print_exc()
 
 
 if __name__ == '__main__':
