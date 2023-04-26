@@ -82,7 +82,7 @@ def create_message(gp):
 
     # Si queda menos de una semana, se crea un mensaje detallado con horarios.
     if days_left == 0:
-        pass
+        message = f"🏁¡HOY ES EL DÍA SEÑORAS Y SEÑORES!🏁\n¿Conseguirá el nano su victoria Nº33?"
     elif days_left <= 7:
         # Crea la parte común para todas las careras.
         message = f"¿¡PREPARADXS PARA LA CARRERA Nº{round}!?\n" \
@@ -102,6 +102,9 @@ def create_message(gp):
 
     return message
 
+# Función principal del programa que llama a los demás métodos.
+def create_tweet():
+    pass
 
 # Función que envía un mensaje de Telegram a través del chat pasado como parámetro.
 async def end_telegram_message(chat_id, message):
@@ -115,7 +118,6 @@ async def end_telegram_message(chat_id, message):
     await session.close()
 
 
-# Función principal del programa que llama a los demás métodos.
 def main(client: tweepy.Client):
     Main.print_title_message(f"F1 REMINDER SCRIPT INITIALISED AT {Main.get_time()}")
 
@@ -125,13 +127,14 @@ def main(client: tweepy.Client):
     gp_cercano = get_next_gp(gps)
 
     # Crea el texto a enviar.
+    tweet = create_tweet()
     message = create_message(gp_cercano)
 
     # Envía el mensaje por Telegram al grupo de F1 Fans.
     asyncio.run(end_telegram_message(chat_id=tkn.telegram_f1_group_id, message=message))
 
     # Sube el tweet con el mensaje.
-    Main.print_message("TWEET CONTENT", message)
+    Main.print_message("TWEET CONTENT", tweet)
     try:
         # client.create_tweet(text=message)
         Main.print_message("F1 REMINDER TWEET STATUS", "F1 reminder tweet upload successful.", "green")
