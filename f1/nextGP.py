@@ -13,8 +13,8 @@ from auth import tokens as tkn
 def get_next_gp(gps):
     today = datetime.date.today()
     gp_cercano = min(gps, key=lambda gp: datetime.datetime.strptime(gp["date"],
-                                                           '%Y-%m-%d').date() - today if datetime.datetime.strptime(
-        gp["date"], '%Y-%m-%d').date() > today else datetime.timedelta(days=365 * 100))
+                                                                    '%Y-%m-%d').date() - today if datetime.datetime.strptime(
+        gp["date"], '%Y-%m-%d').date() >= today else datetime.timedelta(days=365 * 100))
 
     return gp_cercano
 
@@ -70,7 +70,7 @@ def format_spanish_timezone(time_str):
 
 
 # Función que crea el tweet que se va a publicar en función del gran premio pasado como parámetro.
-def create_message(gp):
+def create_message_and_tweet(gp):
     # Se extraen todos los datos en variables locales.
     country = gp['Circuit']['Location']['country']
     round = gp['round']
@@ -79,10 +79,14 @@ def create_message(gp):
     time = gp['time']
     days_left = get_days_left(gp)
     message = "Mensaje a enviar. Si lees esto es que ha dado error y no se ha asignado nunca."
+    tweet = "Mensaje a enviar. Si lees esto es que ha dado error y no se ha asignado nunca."
 
-    # Si queda menos de una semana, se crea un mensaje detallado con horarios.
+    # Si es el mismo día de la carrera.
     if days_left == 0:
-        message = f"🏁¡HOY ES EL DÍA SEÑORAS Y SEÑORES!🏁\n¿Conseguirá el nano su victoria Nº33?"
+        # Se asigna el mismo valor a las dos variables.
+        tweet = message = f"🏁 ¡HOY ES EL DÍA SEÑORAS Y SEÑORES! 🏁\n¿Conseguirá el nano su victoria Nº33?"
+
+    # Si queda menos de una semana, se muestran los horarios detallados.
     elif days_left <= 7:
         # Crea la parte común para todas las careras.
         message = f"¿¡PREPARADXS PARA LA CARRERA Nº{round}!?\n" \
@@ -97,17 +101,14 @@ def create_message(gp):
         message = message + f"⏱  Clasificación: {get_day_of_the_week(gp['Qualifying']['date'])} a las {format_spanish_timezone(gp['Qualifying']['time'])}\n\n" \
                             f"🏁 Carrera: {get_day_of_the_week(date)} a las {format_spanish_timezone(time)}\n"
 
+    # Si queda más de una semana.
     else:
-        message = f"¿¡PREPARADXS PARA LA CARRERA Nº{round}!?\nQuedan {days_left} días para el Gran Premio de {country} en {circuit}. Fecha: {date}. Hora: {time} 🏎️🏁"
+        tweet = message = f"¿¡PREPARADXS PARA LA CARRERA Nº{round}!?\nQuedan {days_left} días para el Gran Premio de {country} en {circuit}. Fecha: {date}. Hora: {format_spanish_timezone(time)} 🏎️🏁"
 
-    return message
-
-# Función principal del programa que llama a los demás métodos.
-def create_tweet():
-    pass
+    return [message, tweet]
 
 # Función que envía un mensaje de Telegram a través del chat pasado como parámetro.
-async def end_telegram_message(chat_id, message):
+async def send_telegram_message(chat_id, message):
     # Crea una instancia del bot de Telegram
     bot = Bot(token=tkn.telegram_token)
 
@@ -126,17 +127,22 @@ def main(client: tweepy.Client):
     gps = response.json()['MRData']['RaceTable']['Races']
     gp_cercano = get_next_gp(gps)
 
-    # Crea el texto a enviar.
-    tweet = create_tweet()
-    message = create_message(gp_cercano)
+    # Crea el texto a enviar y a subir.
+    message_and_tweet = create_message_and_tweet(gp_cercano)
 
     # Envía el mensaje por Telegram al grupo de F1 Fans.
-    asyncio.run(end_telegram_message(chat_id=tkn.telegram_f1_group_id, message=message))
+    Main.print_message("MESSAGE CONTENT", message_and_tweet[0])
+    try:
+        asyncio.run(send_telegram_message(chat_id=tkn.telegram_f1_group_id, message=message_and_tweet[0]))
+        Main.print_message("F1 REMINDER MESSAGE STATUS", "F1 reminder message_and_tweet sending successful.", "green")
+    except Exception as ex:
+        Main.print_message("F1 REMINDER MESSAGE STATUS", "F1 reminder message_and_tweet sending failed.", "red")
+        Main.print_message("ERROR MESSAGE", str(ex), "red")
 
     # Sube el tweet con el mensaje.
-    Main.print_message("TWEET CONTENT", tweet)
+    Main.print_message("TWEET CONTENT", message_and_tweet[1])
     try:
-        # client.create_tweet(text=message)
+        client.create_tweet(text=message_and_tweet[1])
         Main.print_message("F1 REMINDER TWEET STATUS", "F1 reminder tweet upload successful.", "green")
     except Exception as ex:
         Main.print_message("F1 REMINDER TWEET STATUS", "F1 reminder tweet upload failed.", "red")

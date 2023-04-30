@@ -71,7 +71,7 @@ def main():
                 postRecommendation.main(client)
 
             # Verifica si es la hora programada para subir el tweet sobre la F1 del día.
-            elif now.hour == 8 and now.minute == 00:
+            elif now.hour == 8 and now.minute == 30:
                 nextGP.main(client)
             else:
                 pass
