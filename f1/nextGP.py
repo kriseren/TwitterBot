@@ -9,18 +9,24 @@ import Main
 from auth import tokens as tkn
 
 
-# Función que obtiene el siguiente Gran Premio a partir de una lista de Grandes Premios.
 def get_next_gp(gps):
+    """
+    Función que obtiene el siguiente Gran Premio a partir de una lista de Grandes Premios.
+    """
     today = datetime.date.today()
-    gp_cercano = min(gps, key=lambda gp: datetime.datetime.strptime(gp["date"],
-                                                                    '%Y-%m-%d').date() - today if datetime.datetime.strptime(
+    next_gp = min(gps, key=lambda gp: datetime.datetime.strptime(gp["date"],'%Y-%m-%d').date() - today if datetime.datetime.strptime(
         gp["date"], '%Y-%m-%d').date() >= today else datetime.timedelta(days=365 * 100))
 
-    return gp_cercano
+    return next_gp
 
 
-# Función que obtiene el número de días que quedan para el siguiente Gran Premio.
+
 def get_days_left(gp):
+    """
+    Función que obtiene el número de días que quedan para el siguiente Gran Premio.
+    :param gp: E
+    :return:
+    """
     today = datetime.date.today()
     fecha_gp = datetime.datetime.strptime(gp['date'], '%Y-%m-%d').date()
     days_left = (fecha_gp - today).days
@@ -28,8 +34,13 @@ def get_days_left(gp):
     return days_left
 
 
-# Función que devuelve el nombre del día de una fecha pasada como parámetro.
-def get_day_of_the_week(date):
+
+def get_day_of_the_week(date: str):
+    """
+    Función que devuelve el nombre del día de una fecha pasada como parámetro.
+    :param date: La fecha de la cual se extraerá el nombre del día de la semana.
+    :return: El nombre del día de la semana. (Por ejemplo: Domingo).
+    """
     # Establece la configuración regional en español.
     try:
         locale.setlocale(locale.LC_TIME, 'es_ES.utf8')
@@ -46,8 +57,12 @@ def get_day_of_the_week(date):
     return nombre_dia
 
 
-# Función que convierte una hora en formato UTC (Z) a la hora en la zona horaria de Madrid.
-def format_spanish_timezone(time_str):
+def format_spanish_timezone(time_str : str):
+    """
+    Función que convierte una hora en formato UTC (Z) a la hora en la zona horaria de Madrid.
+    :param time_str: La hora que se desea transformar, en cadena de caracteres. (Por ejemplo: 09:00:00Z)
+    :return: La hora convertida en la zona horaria de Madrid, en cadena de caracteres. (Por ejemplo: 11:00:00)
+    """
     # Convierte la hora UTC pasada como parámetro en un objeto Time.
     time_utc = datetime.datetime.strptime(time_str[:-1], "%H:%M:%S").time()
 
@@ -69,8 +84,13 @@ def format_spanish_timezone(time_str):
     return formatted_time
 
 
-# Función que crea el tweet que se va a publicar en función del gran premio pasado como parámetro.
 def create_message_and_tweet(gp):
+    """
+    Función que crea tanto el mensaje a enviar por telegram como el tweet que se va a publicar en función del gran premio pasado como parámetro.
+    :param gp: Array que contiene la información del gran premio sobre el que se va a escribir el mensaje y el tweet.
+    :return: Devuelve un array de 2 posiciones que contiene el mensaje y el tweet. La primera posición contiene el mensaje y la segunda el tweet. ([mensaje,tweet])
+    """
+
     # Se extraen todos los datos en variables locales.
     country = gp['Circuit']['Location']['country']
     round = gp['round']
@@ -86,11 +106,11 @@ def create_message_and_tweet(gp):
         # Se asigna el mismo valor a las dos variables.
         tweet = message = f"🏁 ¡HOY ES EL DÍA SEÑORAS Y SEÑORES! 🏁\n¿Conseguirá el nano su victoria Nº33?"
 
-    # Si queda menos de una semana, se muestran los horarios detallados.
-    elif days_left <= 7:
+    # Si queda menos de 5 días, se muestran los horarios detallados.
+    elif days_left <= 5:
         # Crea la parte común para todas las careras.
         message = f"¿¡PREPARADXS PARA LA CARRERA Nº{round}!?\n" \
-                  f"Estamos en semana de Gran Premio y apenas quedan {days_left} días, así que nunca está de más recordar los horarios 👇🏼\n\n" \
+                  f"Estamos en semana de Gran Premio y apenas quedan {days_left} días para volver a disfrutar, así que nunca está de más recordar los horarios 👇🏼\n\n" \
                   f"🏃 Entrenamientos libres 1: {get_day_of_the_week(gp['FirstPractice']['date'])} a las {format_spanish_timezone(gp['FirstPractice']['time'])}\n\n" \
                   f"🏃 Entrenamientos libres 2: {get_day_of_the_week(gp['SecondPractice']['date'])} a las {format_spanish_timezone(gp['SecondPractice']['time'])}\n\n" \
  \
@@ -101,14 +121,24 @@ def create_message_and_tweet(gp):
         message = message + f"⏱  Clasificación: {get_day_of_the_week(gp['Qualifying']['date'])} a las {format_spanish_timezone(gp['Qualifying']['time'])}\n\n" \
                             f"🏁 Carrera: {get_day_of_the_week(date)} a las {format_spanish_timezone(time)}\n"
 
+    # Si queda menos de una semana, se informa.
+    elif days_left < 7:
+        tweet = message = f"¿¡PREPARADXS PARA LA CARRERA Nº{round}!?\nEntramos en semana de carrera y quedan {days_left} días para el Gran Premio de {country} en {circuit} este {date} a las {format_spanish_timezone(time)} 🏎️🏁"
+
     # Si queda más de una semana.
     else:
         tweet = message = f"¿¡PREPARADXS PARA LA CARRERA Nº{round}!?\nQuedan {days_left} días para el Gran Premio de {country} en {circuit}. Fecha: {date}. Hora: {format_spanish_timezone(time)} 🏎️🏁"
 
     return [message, tweet]
 
-# Función que envía un mensaje de Telegram a través del chat pasado como parámetro.
+
 async def send_telegram_message(chat_id, message):
+    """
+    Función que envía un mensaje de Telegram a través del chat pasado como parámetro.
+    :param chat_id: El identificador del chat de telegram a través del cual se enviará el mensaje.
+    :param message: El mensaje a enviar en forma de cadena de caracteres.
+    :return: No devuelve nada.
+    """
     # Crea una instancia del bot de Telegram
     bot = Bot(token=tkn.telegram_token)
 
@@ -120,6 +150,11 @@ async def send_telegram_message(chat_id, message):
 
 
 def main(client: tweepy.Client):
+    """
+    Función principal del script de nextGP que envía un mensaje y sube un tweet relacionados con la F1.
+    :param client: El cliente de Twitter que permite subir el tweet.
+    :return: No devuelve nada.
+    """
     Main.print_title_message(f"F1 REMINDER SCRIPT INITIALISED AT {Main.get_time()}")
 
     # Obtiene la información del próximo Gran Premio.
