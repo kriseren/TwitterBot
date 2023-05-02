@@ -113,7 +113,9 @@ def create_message_and_tweet(gp):
                   f"Estamos en semana de Gran Premio y apenas quedan {days_left} días para volver a disfrutar, así que nunca está de más recordar los horarios 👇🏼\n\n" \
                   f"🏃 Entrenamientos libres 1: {get_day_of_the_week(gp['FirstPractice']['date'])} a las {format_spanish_timezone(gp['FirstPractice']['time'])}\n\n" \
                   f"🏃 Entrenamientos libres 2: {get_day_of_the_week(gp['SecondPractice']['date'])} a las {format_spanish_timezone(gp['SecondPractice']['time'])}\n\n" \
- \
+
+        tweet = f"¿¡PREPARADXS PARA LA CARRERA Nº{round}!?\n" \
+                f"Estamos en semana de carrera y apenas quedan {days_left} días para el Gran Premio de {country} en {circuit}. Fecha: {date}. Hora: {format_spanish_timezone(time)} 🏎️🏁"
         # Si hay Entrenamientos libres 3 significa que no es Sprint.
         # TODO buscar una manera de saber si hay sprint o carrera normal y que sea dinámico.
 

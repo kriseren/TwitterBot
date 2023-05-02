@@ -38,6 +38,3 @@ def main(client: tweepy.Client):
     except Exception as ex:
         Main.print_message("MUSIC RECOMMENDATION STATUS","Music recommendation upload failed","red")
         Main.print_message("ERROR MESSAGE",str(ex),"red")
-
-if __name__ == '__main__':
-    main()
