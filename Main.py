@@ -8,7 +8,8 @@ from aiogram import Bot
 from auth import auth_utilities
 from auth import tokens as tkn
 from common_actions import mentions
-from f1 import nextGP
+from f1 import nextGP,raceResults
+from weather import postForecast
 from music import postRecommendation
 
 
@@ -42,6 +43,11 @@ def print_title_message(content):
 
 # Función que envía un mensaje de Telegram a través del chat pasado modo parámetro.
 async def send_error_message(message):
+
+    # Define una cabecera al mensaje para poder mejorar la legibilidad.
+    message_header = "🚨 KRISEREN BOT HA SUFRIDO UN ERROR 🚨️\nLamentablemente, el bot de twitter ha sufrido un error. Deberías arreglarlo, así que te dejo aquí el mensaje del error:\n"
+    message = message_header+message
+
     # Crea una instancia del bot de Telegram
     bot = Bot(token=tkn.telegram_token)
 
@@ -66,18 +72,27 @@ def main():
             # Obtiene la fecha y la hora actuales.
             now = get_time()
 
-            # Verifica si es la hora programada para subir la recomendación musical del día.
-            if now.hour == 14 and now.minute == 00:
-                postRecommendation.main(client)
+            # Verifica si es la hora programada para subir la previsión del tiempo.
+            if now.hour == 7 and now.minute == 20:
+                postForecast.main()
 
             # Verifica si es la hora programada para subir el tweet sobre la F1 del día.
-            elif now.hour == 8 and now.minute == 30:
+            elif now.hour == 9 and now.minute == 30:
                 nextGP.main(client)
+
+            # Verifica si es la hora programada para subir la recomendación musical del día.
+            elif now.hour == 14 and now.minute == 00:
+                postRecommendation.main(client)
             else:
                 pass
 
+            # Verifica si es domingo a las 6 de la tarde.
+            weekday = datetime.today().weekday()
+            if weekday == 6 and now.hour == 18 and now.minute == 0:
+                raceResults.main(client)
+
             # Verifica si ha entrado algún tweet nuevo y lo gestiona.
-            mentions.main(client)
+            #mentions.main(client)
 
             # Pausar el programa durante un minuto antes de verificar la hora nuevamente.
             time.sleep(60)

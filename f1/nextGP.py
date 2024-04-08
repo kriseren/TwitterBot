@@ -5,6 +5,8 @@ import pytz
 import requests
 import tweepy
 from aiogram import Bot
+from termcolor import termcolor
+
 import Main
 from auth import tokens as tkn
 
@@ -104,18 +106,21 @@ def create_message_and_tweet(gp):
     # Si es el mismo día de la carrera.
     if days_left == 0:
         # Se asigna el mismo valor a las dos variables.
-        tweet = message = f"🏁 ¡HOY ES EL DÍA SEÑORAS Y SEÑORES! 🏁\n¿Conseguirá el nano su victoria Nº33?"
+        tweet = message = f"🏁 ¡HOY ES EL DÍA SEÑORAS Y SEÑORES! 🏁\n¿Conseguirá el nano su victoria Nº33? Todo el mundo a ver la carrera a las {format_spanish_timezone(time)}"
 
     # Si queda menos de 5 días, se muestran los horarios detallados.
-    elif days_left <= 5:
+    elif days_left <= 2:
         # Crea la parte común para todas las careras.
-        message = f"¿¡PREPARADXS PARA LA CARRERA Nº{round}!?\n" \
+        message = tweet = f"¿¡PREPARADXS PARA LA CARRERA Nº{round}!?\n" \
                   f"Estamos en semana de Gran Premio y apenas quedan {days_left} días para volver a disfrutar, así que nunca está de más recordar los horarios 👇🏼\n\n" \
                   f"🏃 Entrenamientos libres 1: {get_day_of_the_week(gp['FirstPractice']['date'])} a las {format_spanish_timezone(gp['FirstPractice']['time'])}\n\n" \
                   f"🏃 Entrenamientos libres 2: {get_day_of_the_week(gp['SecondPractice']['date'])} a las {format_spanish_timezone(gp['SecondPractice']['time'])}\n\n" \
+                  f"🏃 Entrenamientos libres 3: {get_day_of_the_week(gp['ThirdPractice']['date'])} a las {format_spanish_timezone(gp['ThirdPractice']['time'])}\n\n" \
 
-        tweet = f"¿¡PREPARADXS PARA LA CARRERA Nº{round}!?\n" \
-                f"Estamos en semana de carrera y apenas quedan {days_left} días para el Gran Premio de {country} en {circuit}. Fecha: {date}. Hora: {format_spanish_timezone(time)} 🏎️🏁"
+
+        #tweet = f"¿¡PREPARADXS PARA LA CARRERA Nº{round}!?\n" \
+        #        f"Estamos en semana de carrera y apenas quedan {days_left} días para el Gran Premio de {country} en {circuit}. Fecha: {date}. Hora: {format_spanish_timezone(time)} 🏎️🏁"
+
         # Si hay Entrenamientos libres 3 significa que no es Sprint.
         # TODO buscar una manera de saber si hay sprint o carrera normal y que sea dinámico.
 
@@ -150,14 +155,36 @@ async def send_telegram_message(chat_id, message):
     session = await bot.get_session()
     await session.close()
 
+# Método que imprime por pantalla un mensaje pasado como parámetro.
+def print_message(title: str,content: str,color: str = "white"):
+    if color != "white":
+        # Imprime el mensaje.
+        print(termcolor.colored(f"[{title}]: {content}", color))
+    else:
+        # Imprime el mensaje.
+        print(f"[{title}]: {content}")
 
-def main(client: tweepy.Client):
+# Método que imprime por pantalla un mensaje pasado como parámetro.
+def print_title_message(content):
+    # Calcula la longitud del mensaje y de la ventana.
+    message_length = len(content)
+    window_width = 80
+
+    # Calcula los separadores.
+    separator_length = (window_width - message_length) // 2
+    left_separator = "-" * separator_length
+    right_separator = "-" * (window_width - message_length - separator_length)
+
+    # Imprime el mensaje.
+    print(f"\n{left_separator} {content} {right_separator}")
+
+def main(client):
     """
     Función principal del script de nextGP que envía un mensaje y sube un tweet relacionados con la F1.
     :param client: El cliente de Twitter que permite subir el tweet.
     :return: No devuelve nada.
     """
-    Main.print_title_message(f"F1 REMINDER SCRIPT INITIALISED AT {Main.get_time()}")
+    print_title_message(f"F1 REMINDER SCRIPT INITIALISED AT {Main.get_time()}")
 
     # Obtiene la información del próximo Gran Premio.
     response = requests.get('https://ergast.com/api/f1/current.json')
@@ -171,16 +198,19 @@ def main(client: tweepy.Client):
     Main.print_message("MESSAGE CONTENT", message_and_tweet[0])
     try:
         asyncio.run(send_telegram_message(chat_id=tkn.telegram_f1_group_id, message=message_and_tweet[0]))
-        Main.print_message("F1 REMINDER MESSAGE STATUS", "F1 reminder message_and_tweet sending successful.", "green")
+        print_message("F1 REMINDER MESSAGE STATUS", "F1 reminder message_and_tweet sending successful.", "green")
     except Exception as ex:
-        Main.print_message("F1 REMINDER MESSAGE STATUS", "F1 reminder message_and_tweet sending failed.", "red")
-        Main.print_message("ERROR MESSAGE", str(ex), "red")
+        print_message("F1 REMINDER MESSAGE STATUS", "F1 reminder message_and_tweet sending failed.", "red")
+        print_message("ERROR MESSAGE", str(ex), "red")
 
     # Sube el tweet con el mensaje.
     Main.print_message("TWEET CONTENT", message_and_tweet[1])
     try:
         client.create_tweet(text=message_and_tweet[1])
-        Main.print_message("F1 REMINDER TWEET STATUS", "F1 reminder tweet upload successful.", "green")
+        print_message("F1 REMINDER TWEET STATUS", "F1 reminder tweet upload successful.", "green")
     except Exception as ex:
-        Main.print_message("F1 REMINDER TWEET STATUS", "F1 reminder tweet upload failed.", "red")
-        Main.print_message("ERROR MESSAGE", str(ex), "red")
+        print_message("F1 REMINDER TWEET STATUS", "F1 reminder tweet upload failed.", "red")
+        print_message("ERROR MESSAGE", str(ex), "red")
+
+if __name__ == '__main__':
+    main()

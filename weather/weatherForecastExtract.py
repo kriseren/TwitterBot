@@ -1,15 +1,17 @@
 # Importo las dependencias.
+import requests
+
 from auth import tokens as tkn
 
 
-def getWeatherDataOld(ciudad):
+def getWeatherData(ciudad):
     # Creamos un diccionario con los parámetros de la URL.
     parametros={"q":ciudad,
                 "units":"metric",
                 "APPID":tkn.openWeather_secret}
 
     # Realizamos la petición, indicando la URL y los parámetros.
-    respuesta=requests.get("http://api.openweathermap.org/data/2.5/weather",params=parametros)
+    respuesta = requests.get("http://api.openweathermap.org/data/2.5/weather",params=parametros)
 
     # Si la respuesta devuelve el código de estado 200, no han habido errores.
     if respuesta.status_code == 200:
@@ -28,4 +30,4 @@ def getWeatherDataOld(ciudad):
         print("De esa ciudad no tengo datos.")
 
 if __name__ == '__main__':
-    getWeatherData()
+    getWeatherData("petrer")
