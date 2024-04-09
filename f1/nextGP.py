@@ -7,7 +7,7 @@ import requests
 import tweepy
 from aiogram import Bot
 
-from auth import tokens as tkn
+from auth import tokens as tkn, auth_utilities
 from utilities.Printer import print_message, print_title_message
 
 
@@ -120,7 +120,7 @@ def get_day_of_the_week(date: str):
     return nombre_dia
 
 
-def main():
+def main(client):
     """
     Función principal del script de recordatorio de F1.
     """
@@ -142,7 +142,6 @@ def main():
 
     print_message("TWEET CONTENT", message_and_tweet[1])
     try:
-        client = tweepy.Client()
         client.create_tweet(text=message_and_tweet[1])
         print_message("F1 REMINDER TWEET STATUS", "F1 reminder tweet upload successful.", "green")
     except Exception as ex:
@@ -151,4 +150,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # Autentica al cliente de Twitter.
+    client = auth_utilities.authenticate_to_twitter()
+    main(client)

@@ -8,7 +8,7 @@ from utilities.Printer import print_message, print_title_message
 
 
 # Método principal del script.
-def main(client: tweepy.Client):
+def main(client):
     """
     Genera y publica un tweet diario como recomendación musical.
 
@@ -22,7 +22,7 @@ def main(client: tweepy.Client):
     sp = auth_utilities.authenticate_to_spotify()
 
     # Escoge una canción para recomendar y extrae sus datos.
-    song = music_utilities.choose_song(sp)
+    song = music_utilities.choose_song()
     track_name = music_utilities.get_track_name()
     artist_name = music_utilities.get_artist_name()
     url = music_utilities.get_url()

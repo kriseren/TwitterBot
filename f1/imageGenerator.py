@@ -1,5 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 
+
 def generar_imagen_con_texto(imagen_fondo_path, texto):
     """
     Genera una nueva imagen con texto encima de una imagen de fondo.
@@ -18,7 +19,7 @@ def generar_imagen_con_texto(imagen_fondo_path, texto):
     dibujo = ImageDraw.Draw(imagen_fondo)
 
     # Establecer la fuente para el texto
-    tamano_fuente = 40
+    tamano_fuente = 60
     fuente_path = "/usr/share/fonts/truetype/Sahadeva/sahadeva.ttf"
     fuente = ImageFont.truetype(fuente_path, tamano_fuente)
 
@@ -36,12 +37,14 @@ def generar_imagen_con_texto(imagen_fondo_path, texto):
     # Guardar la imagen con el texto en un nuevo archivo
     imagen_fondo.save("imagen_con_texto.png")
 
+
 def main():
     """
     Función principal del script.
     """
     # Llamar a la función para generar la imagen con texto sobre la imagen de fondo
-    generar_imagen_con_texto("/home/logan/Escritorio/am23_plantilla.png", "¡Texto a agregar encima!")
+    generar_imagen_con_texto("/home/logan/Descargas/plantilla.png", "RAUL TRABAJA")
+
 
 if __name__ == "__main__":
     main()
