@@ -1,5 +1,6 @@
 from auth import auth_utilities
 from weather import weatherForecastExtract
+from utilities.Printer import  print_message, print_title_message
 
 def main():
     # Autenticación en twitter.
@@ -23,13 +24,14 @@ def main():
                                                            "#weather #weatherforecast"
 
     # Subir el tweet
-    print("[TWEET STATUS]")
+    print_message("[TWEET STATUS]")
     try:
         client.create_tweet(text=tweet_content)
-        print("Tweet upload successful.")
-        print("\n" + tweet_content)
+        print_message("Tweet upload successful.")
+        print_message("\n" + tweet_content)
     except:
         print("The upload failed --> " + tweet_content)
+
 
 if __name__ == '__main__':
     main()

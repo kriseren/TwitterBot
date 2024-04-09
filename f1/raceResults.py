@@ -1,14 +1,12 @@
 import asyncio
-import datetime
-import locale
-import pytz
+from datetime import datetime
+
 import requests
-import tweepy
 from aiogram import Bot
-from termcolor import termcolor
-from googletrans import Translator
-import Main
+
 from auth import tokens as tkn, auth_utilities
+from utilities import Translator
+from utilities.Printer import print_message, print_title_message
 
 
 def get_last_race_results():
@@ -35,16 +33,6 @@ def get_last_race_results():
         return None
 
 
-def translate(text):
-    try:
-        translator = Translator()
-        translated_text = translator.translate(text, src='en', dest='es')
-        return translated_text.text
-    except Exception as e:
-        print("Error occurred:", e)
-        return None
-
-
 def create_message_and_tweet(last_race_results):
     """
     Función que crea el texto del tweet con los resultados de la última carrera.
@@ -54,7 +42,7 @@ def create_message_and_tweet(last_race_results):
     country = last_race_results["Circuit"]["Location"]["country"]
 
     # Crear el encabezado del tweet.
-    tweet_text = translate(f"🏁 Results from the {race_name}:") + "\n\n"
+    tweet_text = Translator.translate(f"🏁 Results from the {race_name}:") + "\n\n"
 
     # Agregar los resultados de cada piloto al tweet.
     for i, result in enumerate(last_race_results["Results"][:10], 1):
@@ -94,34 +82,8 @@ async def send_telegram_message(chat_id, message):
     session = await bot.get_session()
     await session.close()
 
-
-# Método que imprime por pantalla un mensaje pasado como parámetro.
-def print_message(title: str, content: str, color: str = "white"):
-    if color != "white":
-        # Imprime el mensaje.
-        print(termcolor.colored(f"[{title}]: {content}", color))
-    else:
-        # Imprime el mensaje.
-        print(f"[{title}]: {content}")
-
-
-# Método que imprime por pantalla un mensaje pasado como parámetro.
-def print_title_message(content):
-    # Calcula la longitud del mensaje y de la ventana.
-    message_length = len(content)
-    window_width = 80
-
-    # Calcula los separadores.
-    separator_length = (window_width - message_length) // 2
-    left_separator = "-" * separator_length
-    right_separator = "-" * (window_width - message_length - separator_length)
-
-    # Imprime el mensaje.
-    print(f"\n{left_separator} {content} {right_separator}")
-
-
 def main(client):
-    print_title_message(f"F1 RACE RESULT SCRIPT INITIALISED AT {Main.get_time()}")
+    print_title_message(f"F1 RACE RESULT SCRIPT INITIALISED AT {datetime.now()}")
 
     # Obtener los resultados de la última carrera
     last_race_results = get_last_race_results()
@@ -131,7 +93,7 @@ def main(client):
         message_and_tweet = create_message_and_tweet(last_race_results)
 
         # Envía el mensaje por Telegram al grupo de F1 Fans.
-        Main.print_message("MESSAGE CONTENT", message_and_tweet)
+        print_message("MESSAGE CONTENT", message_and_tweet)
         try:
             asyncio.run(send_telegram_message(chat_id=tkn.telegram_f1_group_id, message=message_and_tweet))
             print_message("F1 RACE RESULT MESSAGE STATUS", "F1 race result message_and_tweet sending successful.",
@@ -141,7 +103,7 @@ def main(client):
             print_message("ERROR MESSAGE", str(ex), "red")
 
         # Sube el tweet con el mensaje.
-        Main.print_message("TWEET CONTENT", message_and_tweet)
+        print_message("TWEET CONTENT", message_and_tweet)
         try:
             client.create_tweet(text=message_and_tweet)
             print_message("F1 REMINDER TWEET STATUS", "F1 race result tweet upload successful.", "green")

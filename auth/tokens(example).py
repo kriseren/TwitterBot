@@ -16,5 +16,5 @@ spotify_id = ""
 
 # TELEGRAM
 telegram_f1_group_id = ""
-telegram_admin_chat_id = "" # El identificador del chat en el que el bot de telegram avisará de errores.
+telegram_admin_chat_id = ""  # El identificador del chat en el que el bot de Telegram avisará de errores.
 telegram_token = ""
