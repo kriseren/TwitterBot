@@ -50,14 +50,25 @@ def create_message_and_tweet(gp):
     if days_left == 0:
         tweet = message = f"🏁 ¡HOY ES EL DÍA SEÑORAS Y SEÑORES! 🏁\n¿Conseguirá el nano su victoria Nº33? Todo el mundo a ver la carrera a las {format_spanish_timezone(time)}"
 
-    elif days_left <= 2:
-        message = tweet = f"¿¡PREPARADXS PARA LA CARRERA Nº{round_num}!?\n" \
-                          f"Estamos en semana de Gran Premio y apenas quedan {days_left} días para volver a disfrutar, así que nunca está de más recordar los horarios 👇🏼\n\n" \
-                          f"🏃 Entrenamientos libres 1: {get_day_of_the_week(gp['FirstPractice']['date'])} a las {format_spanish_timezone(gp['FirstPractice']['time'])}\n\n" \
-                          f"🏃 Entrenamientos libres 2: {get_day_of_the_week(gp['SecondPractice']['date'])} a las {format_spanish_timezone(gp['SecondPractice']['time'])}\n\n" \
-                          f"🏃 Entrenamientos libres 3: {get_day_of_the_week(gp['ThirdPractice']['date'])} a las {format_spanish_timezone(gp['ThirdPractice']['time'])}\n\n" \
-                          f"⏱  Clasificación: {get_day_of_the_week(gp['Qualifying']['date'])} a las {format_spanish_timezone(gp['Qualifying']['time'])}\n\n" \
-                          f"🏁 Carrera: {get_day_of_the_week(date)} a las {format_spanish_timezone(time)}\n"
+    elif days_left <= 3:
+
+        # Se comprueba que sea una carrera al sprint.
+        if 'Sprint' in gp:
+            message = tweet = f"¿¡PREPARADXS PARA LA CARRERA Nº{round_num}!?\n" \
+                              f"Estamos en semana de Gran Premio y apenas quedan {days_left} días para volver a disfrutar, así que nunca está de más recordar los horarios 👇🏼\n\n" \
+                              f"🏃 Entrenamientos libres 1: {get_day_of_the_week(gp['FirstPractice']['date'])} a las {format_spanish_timezone(gp['FirstPractice']['time'])}\n\n" \
+                              f"⏱ Clasificación Sprint: {get_day_of_the_week(gp['SecondPractice']['date'])} a las {format_spanish_timezone(gp['SecondPractice']['time'])}\n\n" \
+                              f"🏁 Carrera Sprint: {get_day_of_the_week(gp['Sprint']['date'])} a las {format_spanish_timezone(gp['Sprint']['time'])}\n\n" \
+                              f"⏱ Clasificación: {get_day_of_the_week(gp['Qualifying']['date'])} a las {format_spanish_timezone(gp['Qualifying']['time'])}\n\n" \
+                              f"🏁 Carrera: {get_day_of_the_week(date)} a las {format_spanish_timezone(time)}\n"
+        else:
+            message = tweet = f"¿¡PREPARADXS PARA LA CARRERA Nº{round_num}!?\n" \
+                              f"Estamos en semana de Gran Premio y apenas quedan {days_left} días para volver a disfrutar, así que nunca está de más recordar los horarios 👇🏼\n\n" \
+                              f"🏃 Entrenamientos libres 1: {get_day_of_the_week(gp['FirstPractice']['date'])} a las {format_spanish_timezone(gp['FirstPractice']['time'])}\n\n" \
+                              f"🏃 Entrenamientos libres 2: {get_day_of_the_week(gp['SecondPractice']['date'])} a las {format_spanish_timezone(gp['SecondPractice']['time'])}\n\n" \
+                              f"🏃 Entrenamientos libres 3: {get_day_of_the_week(gp['ThirdPractice']['date'])} a las {format_spanish_timezone(gp['ThirdPractice']['time'])}\n\n" \
+                              f"⏱ Clasificación: {get_day_of_the_week(gp['Qualifying']['date'])} a las {format_spanish_timezone(gp['Qualifying']['time'])}\n\n" \
+                              f"🏁 Carrera: {get_day_of_the_week(date)} a las {format_spanish_timezone(time)}\n"
 
     elif days_left < 7:
         tweet = message = f"¿¡PREPARADXS PARA LA CARRERA Nº{round_num}!?\nEntramos en semana de carrera y quedan {days_left} días para el Gran Premio de {country} en {circuit} este {date} a las {format_spanish_timezone(time)} 🏎️🏁"
@@ -66,6 +77,7 @@ def create_message_and_tweet(gp):
         tweet = message = f"¿¡PREPARADXS PARA LA CARRERA Nº{round_num}!?\nQuedan {days_left} días para el Gran Premio de {country} en {circuit}. Fecha: {date}. Hora: {format_spanish_timezone(time)} 🏎️🏁"
 
     return [message, tweet]
+
 
 
 async def send_telegram_message(chat_id, message):
@@ -134,7 +146,7 @@ def main(client):
 
     print_message("MESSAGE CONTENT", message_and_tweet[0])
     try:
-        asyncio.run(send_telegram_message(chat_id=tkn.telegram_f1_group_id, message=message_and_tweet[0]))
+        asyncio.run(send_telegram_message(chat_id=tkn.telegram_cibers8a_group_id, message=message_and_tweet[0]))
         print_message("F1 REMINDER MESSAGE STATUS", "F1 reminder message sending successful.", "green")
     except Exception as ex:
         print_message("F1 REMINDER MESSAGE STATUS", "F1 reminder message sending failed.", "red")

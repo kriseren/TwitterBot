@@ -1,0 +1,39 @@
+/* Estilos para el elemento body */
+body {
+    overflow-y: hidden; /* Ocultar el scroll vertical */
+    font-family: Arial, sans-serif; /* Fuente amigable */
+    color: #231c42;
+}
+
+/* Estilos para el elemento main */
+main {
+    background-color: #d5c0e1;
+    display: flex; /* Activar Flexbox */
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    height: 100vh; /* Establecer la altura al 100% del viewport */
+}
+
+/* Estilos para el robot */
+.robot {
+    position: absolute; /* Posición absoluta */
+    top: 60%; /* Posición relativa al contenedor */
+    left: 20%; /* Posición relativa al contenedor */
+}
+
+/* Estilos para el bocadillo de texto */
+.text-area {
+    position: absolute; /* Posición absoluta */
+    top: 20%; /* Posición relativa al contenedor */
+    left: 8%; /* Posición relativa al contenedor */
+}
+
+/* Estilos para el texto dentro del bocadillo */
+.text-area p {
+    position: absolute; /* Posición absoluta */
+    top: 25%;
+    left: 4%;
+    font-size: 30px; /* Tamaño de fuente */
+    font-weight: bold; /* Texto en negrita */
+    max-width: 540px;
+}
