@@ -36,7 +36,4 @@ async def send_telegram_message(chat_id, message, photo_path=None):
         with open(photo_path, 'rb') as photo:
             await bot.send_photo(chat_id=chat_id, photo=photo)
 
-    # Cierra la sesión del bot.
-    session = await bot.get_session()
-    await session.close()
-
+    await bot.session.close()
