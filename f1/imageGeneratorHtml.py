@@ -5,7 +5,7 @@ import auth.tokens as tkn
 from auth import auth_utilities
 
 
-def main(client):
+def main(client, image_text):
     """
     Función principal del script.
 
@@ -16,6 +16,9 @@ def main(client):
     # Leer el contenido del archivo HTML
     with open("facts/factTemplate.html", "r", encoding="utf-8") as file:
         html_content = file.read()
+
+        # Reemplazar el marcador de posición {{text}} con el texto proporcionado
+        html_content = html_content.replace("{{text}}", image_text)
 
     # Leer el contenido del archivo CSS
     with open("facts/factTemplate.css", "r", encoding="utf-8") as file:
@@ -40,14 +43,35 @@ def main(client):
     if image_response.status_code == 200:
         image_url = image_response.json()['url']
         print("Image URL:", image_url)
+        image_name = "downloadedImage.jpg"
+
+        # Descargar la imagen.
+        download_image(image_url,image_name)
 
         # Enviar la imagen por telegram.
-        asyncio.run(send_telegram_message(chat_id=tkn.telegram_admin_chat_id, message="PRUEBA PRUEBITA PRUEBA", photo_path=image_url))
+        asyncio.run(send_telegram_message(chat_id=tkn.telegram_admin_chat_id, message="TOOOMA FOTO BROO", photo_path=image_name))
     else:
         print("Failed to create image. Error:", image_response.text)
 
 
+def download_image(url, nombre_archivo):
+    try:
+        # Realizar la solicitud GET para obtener la imagen
+        response = requests.get(url)
+
+        # Verificar si la solicitud fue exitosa (código de estado 200)
+        if response.status_code == 200:
+            # Abrir un archivo en modo binario para escribir la imagen descargada
+            with open(nombre_archivo, 'wb') as archivo:
+                # Escribir el contenido de la respuesta en el archivo
+                archivo.write(response.content)
+            print("¡Imagen descargada con éxito!")
+        else:
+            print(f"Error al descargar la imagen. Código de estado: {response.status_code}")
+    except Exception as e:
+        print(f"Error al descargar la imagen: {e}")
+
 if __name__ == "__main__":
     # Autenticar al cliente de Twitter
     client = auth_utilities.authenticate_to_twitter()
-    main(client)
+    main(client, "Raul trabaja")
