@@ -34,9 +34,7 @@ def main():
             elif now.weekday() == 6 and now.hour == 18 and now.minute == 0:
                 raceResults.main(client)
 
-            #mentions.main(client)
-
-            time.sleep(60)
+            time.sleep(30)
 
     except Exception as ex:
         Printer.print_message("ERROR", str(ex), "red")

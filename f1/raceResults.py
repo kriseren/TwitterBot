@@ -14,7 +14,7 @@ def get_last_race_results():
     Función que obtiene los resultados de la última carrera de Fórmula 1.
     """
     # URL del endpoint de resultados de la última carrera.
-    url = "http://ergast.com/api/f1/current/last/results.json"
+    url = "https://api.jolpi.ca/ergast/f1/2025/results/?format=json"
 
     # Realizar la solicitud GET al endpoint.
     response = requests.get(url)

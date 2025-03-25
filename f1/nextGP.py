@@ -135,7 +135,7 @@ def main(client):
     """
     print_title_message(f"F1 REMINDER SCRIPT INITIALISED AT {datetime.datetime.now()}")
 
-    response = requests.get('https://ergast.com/api/f1/current.json')
+    response = requests.get('https://api.jolpi.ca/ergast/f1/2025/races/?format=json')
     gps = response.json()['MRData']['RaceTable']['Races']
     gp_cercano = get_next_gp(gps)
 

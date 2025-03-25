@@ -1,1 +1,9 @@
+# Omitir el envío de archivo de tokens.
 /auth/tokens.py
+
+# Omitir el envío de archivos de cache.
+.cache
+**/__pycache__
+
+# Omitir el envío de la ruta de entorno virtual.
+venv
